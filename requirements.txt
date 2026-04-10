@@ -1,2 +1,3 @@
 flask
-gunicorn :app
+gunicorn app:app
+
