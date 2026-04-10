@@ -1,16 +1,16 @@
 from flask import Flask, render_template, request, redirect
-import mysql.connector
+import os
+import sqlite3
 
 app = Flask(__name__)
 
-# Configure your XAMPP/MySQL connection here
-db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '',
-    'database': 'bincom_test'
-}
-
+# ----- paste the new code here-----
+base_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(base_dir, 'Bincom_test.db')
+def get_db():
+    conn= sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
 def get_db():
     return mysql.connector.connect(**db_config)
 
