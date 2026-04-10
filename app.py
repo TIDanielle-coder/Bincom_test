@@ -1,10 +1,10 @@
 import os
 import sqlite3
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text 
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
-
-from flask_sqlalchemy import SQLAlchemy
 
 # This gets the URL from Render's Environment Variables
 uri = os.environ.get("DATABASE_URL")
@@ -13,23 +13,19 @@ if uri and uri.startswith("postgres://"):
 
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
-
+@app.route('/')
+def home():
     return "Bincom Test is Running! Go to /polling-unit/8 to see results."
 
 @app.route('/polling-unit/<int:id>')
 def unit_result(id):
-    db = get_db()
-    results = db.execute("SELECT * FROM announced_pu_results WHERE polling_unit_uniqueid = ?", (id,)).fetchall()
-    db.close()
-    return render_template('unit.html', results=results, unit_id=id)
-
-@app.route('/lga', methods=['GET', 'POST'])
-def lga_total():
-    db = get_db()
-    lgas = db.execute("SELECT lga_id, lga_name FROM lga").fetchall()
-    selected_results = []
+    query = text("SELECT * FROM announced_pu_results WHERE polling_unit_uniqueid = :id")
+    results = db.session.execute(query, {'id': id}).fetchall()
+    return render_template('unit.html', results=
+        lgas = 
+    db.session.execute(text("SELECT lga_id, 
+    lga_name FROM lga")).fetchall()
     if request.method == 'POST':
         lga_id = request.form.get('lga_id')
         query = """
