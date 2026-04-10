@@ -11,8 +11,6 @@ def get_db():
     conn= sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
-def get_db():
-    return mysql.connector.connect(**db_config)
 
 # QUESTION 1: Individual Polling Unit Result
 @app.route('/polling-unit/<int:id>')
