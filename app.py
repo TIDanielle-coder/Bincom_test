@@ -4,17 +4,18 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# This part ensures Render finds your database file
-base_dir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(base_dir, "bincom_test.db")
+from flask_sqlalchemy import SQLAlchemy
 
-def get_db():
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    return conn
+# This gets the URL from Render's Environment Variables
+uri = os.environ.get("DATABASE_URL")
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
 
-@app.route('/')
-def home():
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
     return "Bincom Test is Running! Go to /polling-unit/8 to see results."
 
 @app.route('/polling-unit/<int:id>')
