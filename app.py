@@ -5,12 +5,9 @@ from sqlalchemy import text
 
 app = Flask(__name__)
 
-# --- DATABASE CONFIGURATION ---
-uri = os.environ.get("DATABASE_URL")
-if uri and uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = uri or 'sqlite:///local_test.db'
+# --- DATABASE CONFIGURATION FOR XAMPP ---
+# Format: mysql+pymysql://username:password@localhost/database_name
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/bincom_test'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
